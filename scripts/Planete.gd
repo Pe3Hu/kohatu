@@ -1,12 +1,13 @@
 extends Node
 
 
-class Null:
+class Planete:
 	var num = {}
+	var arr = {}
+	var obj = {}
 	
-	func _init(input_):
-		num.index = Global.num.primary_key.null
-		Global.num.primary_key.null += 1
+	func _init():
+		arr.serveur = []
 
 class Sorter:
 	static func sort_ascending(a, b):

@@ -13,8 +13,9 @@ func init_num():
 	init_primary_key()
 	
 	num.grid = {}
-	num.grid.n = 12
-	num.grid.m = 12
+	num.grid.n = 3
+	num.grid.rows = 2
+	num.grid.cols = 3
 	num.grid.a = 24
 	num.grid.h = sqrt(3)*num.grid.a/2
 
@@ -46,14 +47,14 @@ func init_arr():
 func init_grid():
 	arr.grid = []
 	
-	for _i in num.grid.n:
+	for _i in num.grid.rows:
 		arr.grid.append([])
 		var vec = Vector2(0,_i*num.grid.h)
 		
 		if _i % 2 == 1:
 			vec.x += 0.5*num.grid.a
 		
-		for _j in num.grid.m:
+		for _j in num.grid.cols:
 			arr.grid[_i].append(vec)
 			vec.x += num.grid.a
 
@@ -63,6 +64,8 @@ func init_node():
 
 func init_flag():
 	flag.click = false
+	flag.grid = {}
+	flag.grid.odd = true
 
 func _ready():
 	init_num()

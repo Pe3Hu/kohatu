@@ -13,7 +13,9 @@ func init_nulls():
 	input.word["Cable"] = "Min"
 	input.word["Insulation"] = "Min"
 	var draft = Classes_Scheme.Draft.new(input)
-	pass
+	
+	Global.obj.scheme = Classes_Scheme.Scheme.new()
+	
 
 func _ready():
 #	var txt = "c4eeec20ece8ebfbe920e4eeec0a"

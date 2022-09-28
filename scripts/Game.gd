@@ -15,7 +15,7 @@ func init_nulls():
 	var draft = Classes_Scheme.Draft.new(input)
 	
 	Global.obj.scheme = Classes_Scheme.Scheme.new()
-	
+	#Global.obj.scheme.roll_draft(draft)
 
 func _ready():
 #	var txt = "c4eeec20ece8ebfbe920e4eeec0a"

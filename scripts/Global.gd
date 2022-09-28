@@ -14,8 +14,9 @@ func init_num():
 	init_primary_key()
 	
 	num.knot = {}
-	num.knot.rows = 7
-	num.knot.cols = 5
+	num.knot.n = 4
+	num.knot.rows = num.knot.n*2-1
+	num.knot.cols = num.knot.n*2-1
 	
 	num.scheme = {}
 	num.scheme.a = 24
@@ -58,6 +59,9 @@ func init_vec():
 	vec.scheme.offset = vec.window_size.center
 	vec.scheme.offset.x -= (num.knot.cols-1) * num.scheme.a / 2
 	vec.scheme.offset.y -= (num.knot.rows-1) * num.scheme.h / 2
+	
+	if num.knot.n % 2 == 0:
+		vec.scheme.offset.x -= num.scheme.a / 2
 
 func init_window_size():
 	vec.window_size = {}
@@ -98,42 +102,3 @@ func conver16(txt_):
 #	for letter in txt_:
 #		sum += letter
 	return sum
-
-func get_knots_by_index(knots,triangle_index_):
-	var m = num.knot.rows-1
-	var x = (triangle_index_/2)/m
-	var y = (triangle_index_/2)%m
-	var a = Vector2()
-	var b = Vector2()
-	var c = Vector2()
-	
-	if x % 2 == 0:
-		a = Vector2(x,y)
-		b = Vector2(x,y+1)
-		c = Vector2(x+1,y)
-		
-		if triangle_index_ % 2 == 1:
-			a.x += 1
-			a.y += 1
-	else:
-		a = Vector2(x,y+1)
-		b = Vector2(x,y)
-		c = Vector2(x+1,y+1)
-		
-		if triangle_index_ % 2 == 1:
-			a.y -= 1
-			a.x += 1
-		
-	var vecs = [a,b,c]
-	var results = []
-	var f = Global.obj
-	
-	for vec in vecs:
-		results.append(knots[vec.y][vec.x])
-	
-	return results
-
-func get_knots_by_vector(knots, triangle_vector_):
-	var m = (num.knot.cols-1)*2
-	var index = int(triangle_vector_.y*m + triangle_vector_.x)
-	return get_knots_by_index(knots, index)

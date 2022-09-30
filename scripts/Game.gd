@@ -15,7 +15,7 @@ func init_nulls():
 	var draft = Classes_Scheme.Draft.new(input)
 	
 	Global.obj.scheme = Classes_Scheme.Scheme.new()
-	#Global.obj.scheme.roll_draft(draft)
+	Global.obj.scheme.roll_draft(draft)
 
 func _ready():
 #	var txt = "c4eeec20ece8ebfbe920e4eeec0a"
@@ -31,9 +31,6 @@ func _input(event):
 			pass
 		else:
 			Global.flag.click = !Global.flag.click
-
-func _process(delta):
-	pass
 
 func _on_Timer_timeout():
 	Global.node.TimeBar.value +=1

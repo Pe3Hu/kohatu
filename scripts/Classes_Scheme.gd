@@ -18,8 +18,6 @@ class Draft:
 		
 		for key in input_.word.keys():
 			dict.restriction[key] = input_.word[key]
-		
-		print(dict)
 
 class Knot:
 	var num = {}
@@ -37,9 +35,9 @@ class Knot:
 		arr.edge = []
 		arr.slot = []
 		arr.neighbour = []
-		flag.avaliable = true
+		flag.avaliable = false
 		flag.visiable = false
-		color.current = Color(0.0, 1.0, 0.0)
+		color.current = Color(0.0, 0.0, 0.0)
 
 class Edge:
 	var num = {}
@@ -55,9 +53,9 @@ class Edge:
 		arr.knot = input_.knots
 		arr.slot = []
 		arr.point = []
-		flag.avaliable = true
+		flag.avaliable = false
 		flag.visiable = false
-		color.current = Color(1.0, 0.0, 0.0)
+		color.current = Color(1.0, 1.0, 1.0)
 		
 		for knot in arr.knot:
 			arr.point.append(knot.vec.pos)
@@ -75,9 +73,10 @@ class Slot:
 		num.index = Global.num.primary_key.slot
 		Global.num.primary_key.slot += 1
 		num.ring = -1
+		num.step = -1
 		vec.grid = input_.grid
 		arr.knot = input_.knots
-		flag.avaliable = true
+		flag.avaliable = false
 		flag.visiable = false
 		flag.blocked = false
 		color.current = Color(0.0, 0.0, 0.0)
@@ -99,14 +98,20 @@ class Slot:
 		
 		for edge in arr.edge:
 			edge.arr.slot.append(self)
+	
+	func free_capsule():
+		return obj.capsule == null && flag.avaliable
+
+	func unfree_capsule():
+		return obj.capsule != null && !flag.avaliable
 
 	func set_capsule(capsule_):
 		flag.visiable = true
 		flag.avaliable = false
 		obj.capsule = capsule_
-		var h = 1/360
-		var s = 1
-		var v = 1
+		var h = 1.0/360
+		var s = 1.0
+		var v = 1.0
 		
 		match obj.capsule.word.role:
 			"Accumulator":
@@ -221,83 +226,6 @@ class Scheme:
 				var slot = Classes_Scheme.Slot.new(input)
 				arr.slot[_i].append(slot)
 
-	func init_slot_rings():
-		var x = Global.num.slot.cols/2
-		var y = Global.num.slot.rows/2
-		var start_slot = arr.slot[y][x]
-		var next = []
-		var current = [start_slot]
-		var ring = 0
-		
-		#start_slot.color.current = Color(0.0, 1.0, 0.0)
-		var counter = Global.num.knot.rows
-		
-		while counter > 0:
-			for slot in current:
-				slot.num.ring = ring
-				
-				for neighbour in slot.arr.neighbour:
-					if neighbour.num.ring == -1 && !next.has(neighbour):
-						next.append(neighbour)
-			
-			current = []
-			current.append_array(next)
-			next = []
-			counter -= 1
-		
-		for slots in arr.slot:
-			for slot in slots:
-				if slot.num.ring != -1:
-					for knot in slot.arr.knot:
-						knot.num.ring = slot.num.ring
-						knot.flag.visiable = true
-					
-					for edge in slot.arr.edge:
-						edge.num.ring = slot.num.ring
-						edge.flag.visiable = true
-					
-					slot.flag.visiable = true
-
-	func init_knot_rings():
-		var n = Global.num.knot.n-1
-		var start = arr.knot[n][n]
-		var next = []
-		var current = [start]
-		var ring = 0
-		
-		while ring < n:
-			for knot in current:
-				knot.num.ring = ring
-				
-				for neighbour in knot.arr.neighbour:
-					if neighbour.num.ring == -1 && !next.has(neighbour):
-						next.append(neighbour)
-				
-				
-				for slot in knot.arr.slot:
-					if slot.num.ring != -1:
-						slot.num.ring = ring
-						slot.flag.avaliable = true
-				
-				for edge in knot.arr.edge:
-					if edge.num.ring != -1:
-						edge.num.ring = ring
-						edge.flag.avaliable = true
-					
-				knot.flag.avaliable = true
-			
-			current = []
-			current.append_array(next)
-			next = []
-			ring += 1
-			
-			
-		
-		for slots in arr.slot:
-			for slot in slots:
-				if slot.num.ring == 1:
-					slot.flag.visiable  = true
-
 	func knots_neighbours():
 		for knots in arr.knot:
 			for knot in knots:
@@ -314,39 +242,31 @@ class Scheme:
 						if neighbour != slot:
 							slot.arr.neighbour.append(neighbour)
 
-	func get_knots_by_index(triangle_index_):
-		var m = Global.num.slot.rows
-		var y = (triangle_index_/2)/m
-		var x = (triangle_index_/2)%m
-		var a = Vector2()
-		var b = Vector2()
-		var c = Vector2()
+	func init_knot_rings():
+		var n = Global.num.knot.n-1
+		var start = arr.knot[n][n]
+		var next = []
+		var current = [start]
+		var ring = 0
 		
-		if y % 2 == 0:
-			a = Vector2(x,y)
-			b = Vector2(x,y+1)
-			c = Vector2(x+1,y)
+		while ring < n:
+			for knot in current:
+				for neighbour in knot.arr.neighbour:
+					if neighbour.num.ring == -1 && !next.has(neighbour):
+						next.append(neighbour)
+				
+				for slot in knot.arr.slot:
+					slot.flag.avaliable = true
+				
+				for edge in knot.arr.edge:
+					edge.flag.avaliable = true
+					
+				knot.flag.avaliable = true
 			
-			if triangle_index_ % 2 == 1:
-				a.x += 1
-				a.y += 1
-		else:
-			a = Vector2(x,y+1)
-			b = Vector2(x,y)
-			c = Vector2(x+1,y+1)
-			
-			if triangle_index_ % 2 == 1:
-				a.y -= 1
-				a.x += 1
-			
-		var vecs = [a,b,c]
-		var results = []
-		
-		for vec in vecs:
-			if chec_knot(vec):
-				results.append(arr.knot[vec.y][vec.x])
-		
-		return results
+			current = []
+			current.append_array(next)
+			next = []
+			ring += 1
 
 	func get_knots_by_vector(triangle_vector_):
 		var y = int(triangle_vector_.y)
@@ -389,17 +309,145 @@ class Scheme:
 		return grid_.y >= 0 && grid_.x >= 0 && grid_.y < Global.num.slot.rows && grid_.x < Global.num.slot.cols
 
 	func roll_draft(draft_):
+		var step = 0
+		var stop = false
+		var max_ = Global.num.slot.cols * Global.num.slot.rows
+		
+		while step < max_ && !stop:
+			stop = get_next_capsule(step)
+			step += 1
+		
+		var full = true
+		draft_.dict.count["Cable"] = step - draft_.dict.count["Processor"] - draft_.dict.count["Accumulator"]
+		draft_.dict.count["Insulation"] = set_insulations(full)
+		print(draft_.dict)
+
+	func init_slot_rings(slot_):
+		var next = []
+		var current = [slot_]
+		var ring = 0
+		var n = Global.num.slot.rows
+		
+		while ring < n:
+			for slot in current:
+				slot.num.ring = ring
+				
+				for neighbour in slot.arr.neighbour:
+					if neighbour.num.ring == -1 && !next.has(neighbour):
+						next.append(neighbour)
+				
+				for knot in slot.arr.knot:
+					if knot.num.ring == -1:
+						knot.num.ring = ring
+				
+				for edge in slot.arr.edge:
+					if edge.num.ring == -1:
+						edge.num.ring = ring
+			
+			current = []
+			current.append_array(next)
+			next = []
+			ring += 1
+			
+		
+#		for slots in arr.slot:
+#			for slot in slots:
+#				if slot.num.ring != -1:
+#					for knot in slot.arr.knot:
+#						knot.num.ring = slot.num.ring
+#						knot.flag.visiable = true
+#
+#					for edge in slot.arr.edge:
+#						edge.num.ring = slot.num.ring
+#						edge.flag.visiable = true
+#
+#					slot.flag.visiable = true
+		pass
+
+	func get_next_capsule(step_):
 		var options = []
 		
-		for slots in arr.slot:
-			for slot in slots:
-				if slot.num.ring == 0:
-					options.append(slot)
+		if step_ == 0:
+			var n = Global.num.knot.n-1
+			var start = arr.knot[n][n]
+			
+			for slot in start.arr.slot:
+				options.append(slot)
+		else:
+			for slots in arr.slot:
+				for slot in slots:
+					if slot.unfree_capsule() && slot.num.step == step_-1:
+						for neighbour in slot.arr.neighbour:
+							if neighbour.free_capsule():
+								options.append(neighbour)
 		
-		#print(options.size())
+		if options.size() == 0:
+			for slots in arr.slot:
+				for slot in slots:
+					if slot.unfree_capsule():
+						for neighbour in slot.arr.neighbour:
+							if neighbour.free_capsule():
+								options.append(neighbour)
+		
+		print(step_)
 		Global.rng.randomize()
 		var index_r = Global.rng.randi_range(0, options.size()-1)
+		var slot = options[index_r] 
 		var input = {}
-		input.role = "Processor"
+		
+		if step_ == 0: 
+				input.role = "Processor"
+				init_slot_rings(slot)
+		else:
+			if slot.num.ring > 2: 
+				var ring = slot.arr.knot[0].num.ring
+				
+				for knot in slot.arr.knot:
+					if knot.num.ring != -1:
+						ring = min(ring,knot.num.ring)
+				
+				if ring > 0:
+					input.role = "Accumulator"
+				else:
+					input.role = "Cable"
+			else:
+				input.role = "Cable"
+		
 		var capsule = Classes_Scheme.Capsule.new(input)
-		options[index_r].set_capsule(capsule)
+		slot.set_capsule(capsule)
+		slot.num.step = step_
+		#rint(step_,slot.vec.grid)
+		return input.role == "Accumulator"
+
+	func set_insulations(full_):
+		var slots_ = []
+		
+		if full_:
+			var knots = []
+			for slots in arr.slot:
+				for slot in slots:
+					if slot.unfree_capsule():
+						for knot in slot.arr.knot:
+							if !knots.has(knot):
+								knots.append(knot)
+		
+			for knot in knots:
+				for slot in knot.arr.slot:
+					if slot.free_capsule():
+						if !slots_.has(slot):
+							slots_.append(slot)
+		else:
+			for slots in arr.slot:
+				for slot in slots:
+					if slot.unfree_capsule():
+						for neighbour in slot.arr.neighbour:
+							if !slots_.has(neighbour) && neighbour.free_capsule():
+								slots_.append(neighbour)
+		
+		for slot in slots_:
+			var input = {}
+			input.role = "Insulation"
+			var capsule = Classes_Scheme.Capsule.new(input)
+			slot.set_capsule(capsule)
+		
+		return slots_.size()

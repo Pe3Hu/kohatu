@@ -14,7 +14,7 @@ func init_num():
 	init_primary_key()
 	
 	num.knot = {}
-	num.knot.n = 4
+	num.knot.n = 5
 	num.knot.rows = num.knot.n*2-1
 	num.knot.cols = num.knot.n*2-1
 	
@@ -94,11 +94,3 @@ func load_json(file_path_,file_name_):
 	file.open(file_path_+file_name_+".json", File.READ)
 	var data = parse_json(file.get_as_text())
 	return data
-
-func conver16(txt_):
-	var letters = []
-	var sum = int(txt_)
-	
-#	for letter in txt_:
-#		sum += letter
-	return sum

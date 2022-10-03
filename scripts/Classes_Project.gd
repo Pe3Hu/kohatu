@@ -135,7 +135,7 @@ class Capsule:
 		word.role = input_.role
 		pass
 
-class Scheme:
+class Project:
 	var num = {}
 	var word = {}
 	var arr = {}
@@ -157,19 +157,19 @@ class Scheme:
 		for _i in Global.num.knot.rows:
 			arr.knot.append([])
 			
-			var vec = Vector2(0,_i*Global.num.scheme.h)
-			vec += Global.vec.scheme.offset
+			var vec = Vector2(0,_i*Global.num.project.h)
+			vec += Global.vec.project.offset
 			
 			if _i % 2 == 1:
-				vec.x += 0.5*Global.num.scheme.a
+				vec.x += 0.5*Global.num.project.a
 			
 			for _j in Global.num.knot.cols:
 				var input = {}
 				input.pos = vec
 				input.grid = Vector2(_j,_i)
-				var knot = Classes_Scheme.Knot.new(input)
+				var knot = Classes_Project.Knot.new(input)
 				arr.knot[_i].append(knot)
-				vec.x += Global.num.scheme.a
+				vec.x += Global.num.project.a
 
 	func init_edges():
 		var types = [[0],[1,2]]
@@ -205,7 +205,7 @@ class Scheme:
 							input.knots.append(arr.knot[begin.y][begin.x])
 							input.knots.append(arr.knot[end.y][end.x])
 							input.type = type
-							var edge = Classes_Scheme.Edge.new(input)
+							var edge = Classes_Project.Edge.new(input)
 							edges[_t].append(edge)
 			
 			if edges[0].size() > 0:
@@ -223,7 +223,7 @@ class Scheme:
 				var input = {}
 				input.grid = Vector2(_j,_i)
 				input.knots = get_knots_by_vector(input.grid)
-				var slot = Classes_Scheme.Slot.new(input)
+				var slot = Classes_Project.Slot.new(input)
 				arr.slot[_i].append(slot)
 
 	func knots_neighbours():
@@ -389,7 +389,6 @@ class Scheme:
 							if neighbour.free_capsule():
 								options.append(neighbour)
 		
-		print(step_)
 		Global.rng.randomize()
 		var index_r = Global.rng.randi_range(0, options.size()-1)
 		var slot = options[index_r] 
@@ -413,7 +412,7 @@ class Scheme:
 			else:
 				input.role = "Cable"
 		
-		var capsule = Classes_Scheme.Capsule.new(input)
+		var capsule = Classes_Project.Capsule.new(input)
 		slot.set_capsule(capsule)
 		slot.num.step = step_
 		#rint(step_,slot.vec.grid)
@@ -447,7 +446,7 @@ class Scheme:
 		for slot in slots_:
 			var input = {}
 			input.role = "Insulation"
-			var capsule = Classes_Scheme.Capsule.new(input)
+			var capsule = Classes_Project.Capsule.new(input)
 			slot.set_capsule(capsule)
 		
 		return slots_.size()

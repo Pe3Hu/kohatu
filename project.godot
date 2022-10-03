@@ -27,9 +27,9 @@ config/icon="res://assets/icon.png"
 [autoload]
 
 Global="*res://scripts/Global.gd"
-Planete="*res://scripts/Planete.gd"
-Serveur="*res://scripts/Serveur.gd"
-Classes_Scheme="*res://scripts/Classes_Scheme.gd"
+Classes_Project="*res://scripts/Classes_Project.gd"
+Classes_Planete="*res://scripts/Classes_Planete.gd"
+Classes_Serveur="*res://scripts/Classes_Serveur.gd"
 
 [physics]
 

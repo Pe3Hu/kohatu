@@ -12,9 +12,9 @@ func init_nulls():
 	input.word = {}
 	input.word["Cable"] = "Min"
 	input.word["Insulation"] = "Min"
-	var draft = Classes_Scheme.Draft.new(input)
+	var draft = Classes_Project.Draft.new(input)
 	
-	Global.obj.scheme = Classes_Scheme.Scheme.new()
+	Global.obj.scheme = Classes_Project.Project.new()
 	Global.obj.scheme.roll_draft(draft)
 
 func _ready():

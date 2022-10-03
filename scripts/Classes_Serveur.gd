@@ -29,7 +29,7 @@ class Drone:
 	func _init(input_):
 		arr.module = [] 
 
-class Serveur:
+class Server:
 	var num = {}
 	var arr = {}
 	var obj = {}

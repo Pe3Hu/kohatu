@@ -18,9 +18,9 @@ func init_num():
 	num.knot.rows = num.knot.n*2-1
 	num.knot.cols = num.knot.n*2-1
 	
-	num.scheme = {}
-	num.scheme.a = 24
-	num.scheme.h = sqrt(3)*num.scheme.a/2
+	num.project = {}
+	num.project.a = 24
+	num.project.h = sqrt(3)*num.project.a/2
 	
 	num.slot = {}
 	num.slot.rows = num.knot.rows-1
@@ -35,6 +35,78 @@ func init_primary_key():
 func init_dict():
 	dict.capsule = {}
 	dict.capsule.name = ["Accumulator", "Processor", "Cable", "Insulation"]
+	
+	dict.ressource = {}
+	dict.ressource.type = {
+		"Technology": ["Specimen","Concept","Project"],
+		"Manufacture": ["Raw","Bullion","Module"],
+		"Reconnaissance": ["Data","Fact","Decree"]
+	}
+	
+	dict.drone = {}
+	dict.drone.job = {
+		"Drilling": {
+			"Input": ["Terrain"],
+			"Output": ["Raw"]
+		},
+		"Carting": {
+			"Input": ["Raw","Bullion","Specimen"],
+			"Output": ["Raw","Bullion","Specimen"]
+		},
+		"Keeping": {
+			"Input": ["Raw","Bullion","Specimen"],
+			"Output": ["Raw","Bullion","Specimen"]
+		},
+		"Melting": {
+			"Input": ["Raw"],
+			"Output": ["Bullion"]
+		},
+		"Integration": {
+			"Input": ["Bullion"],
+			"Output": ["Module"]
+		},
+		"Gathering": {
+			"Input": ["Terrain"],
+			"Output": ["Specimen"]
+		},
+		"Scrutinizing": {
+			"Input": ["Specimen"],
+			"Output": ["Concept"]
+		},
+		"Testing": {
+			"Input": ["Concept"],
+			"Output": ["Project"]
+		},
+		"Retention": {
+			"Input": ["Terrain"],
+			"Output": ["Terrain"]
+		},
+		"Liquidation": {
+			"Input": ["Terrain"],
+			"Output": ["Terrain"]
+		},
+		"Scouting": {
+			"Input": ["Terrain"],
+			"Output": ["Data"]
+		},
+		"Revise": {
+			"Input": ["Data"],
+			"Output": ["Fact"]
+		},
+		"Prognostication": {
+			"Input": ["Fact"],
+			"Output": ["Decree"]
+		},
+		"Planning": {
+			"Input": ["Decree"],
+			"Output": ["Plan"]
+		},
+		"Assembling": {
+			"Input": ["Project","Module"],
+			"Output": ["Drone","Drone"]
+		}
+	}
+	
 
 func init_arr():
 	arr.sequence = {} 
@@ -55,13 +127,13 @@ func init_flag():
 func init_vec():
 	init_window_size()
 	
-	vec.scheme = {}
-	vec.scheme.offset = vec.window_size.center
-	vec.scheme.offset.x -= (num.knot.cols-1) * num.scheme.a / 2
-	vec.scheme.offset.y -= (num.knot.rows-1) * num.scheme.h / 2
+	vec.project = {}
+	vec.project.offset = vec.window_size.center
+	vec.project.offset.x -= (num.knot.cols-1) * num.project.a / 2
+	vec.project.offset.y -= (num.knot.rows-1) * num.project.h / 2
 	
 	if num.knot.n % 2 == 0:
-		vec.scheme.offset.x -= num.scheme.a / 2
+		vec.project.offset.x -= num.project.a / 2
 
 func init_window_size():
 	vec.window_size = {}

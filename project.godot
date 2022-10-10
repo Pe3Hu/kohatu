@@ -30,6 +30,11 @@ Global="*res://scripts/Global.gd"
 Classes_Project="*res://scripts/Classes_Project.gd"
 Classes_Planete="*res://scripts/Classes_Planete.gd"
 Classes_Serveur="*res://scripts/Classes_Serveur.gd"
+Classes_Terrain="*res://scripts/Classes_Terrain.gd"
+
+[display]
+
+window/size/height=780
 
 [physics]
 

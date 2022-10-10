@@ -25,7 +25,6 @@ func _draw():
 #	Global.obj.scheme.arr.knot[1][0].flag.visiable = true
 #	Global.obj.scheme.arr.knot[1][1].flag.visiable = true
 #	Global.obj.scheme.arr.knot[2][0].flag.visiable = true
-	
 	var x = Global.num.knot.n-1
 	var y = x
 	Global.obj.scheme.arr.knot[x][y].flag.visiable = true
@@ -47,5 +46,3 @@ func _draw():
 	
 	draw_circle(Global.vec.window_size.center, 3, Color(1.0, 1.0, 1.0))
 
-func _process(delta):
-	update()

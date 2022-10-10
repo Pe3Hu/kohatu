@@ -16,6 +16,13 @@ func init_nulls():
 	
 	Global.obj.scheme = Classes_Project.Project.new()
 	Global.obj.scheme.roll_draft(draft)
+	
+	input = {}
+	input.cols = 27
+	input.rows = 27
+	input.n = 3
+	input.bulk = 1000
+	Global.obj.terrain = Classes_Terrain.Terrain.new(input)
 
 func _ready():
 #	var txt = "c4eeec20ece8ebfbe920e4eeec0a"

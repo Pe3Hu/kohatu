@@ -2,6 +2,7 @@ extends Node
 
 
 var rng = RandomNumberGenerator.new()
+var noise = OpenSimplexNoise.new()
 var num = {}
 var dict = {}
 var arr = {}
@@ -25,6 +26,9 @@ func init_num():
 	num.slot = {}
 	num.slot.rows = num.knot.rows-1
 	num.slot.cols = (num.knot.cols-1)*2
+	
+	num.sector = {}
+	num.sector.a = 24
 
 func init_primary_key():
 	num.primary_key = {}
@@ -106,7 +110,6 @@ func init_dict():
 			"Output": ["Drone","Drone"]
 		}
 	}
-	
 
 func init_arr():
 	arr.sequence = {} 
@@ -114,6 +117,13 @@ func init_arr():
 	arr.sequence["A000045"] = [89, 55, 34, 21, 13, 8, 5, 3, 2, 1, 1]
 	arr.sequence["A000124"] = [7, 11, 16] #, 22, 29, 37, 46, 56, 67, 79, 92, 106, 121, 137, 154, 172, 191, 211]
 	arr.sequence["A001358"] = [4, 6, 9, 10, 14, 15, 21, 22, 25, 26]
+	
+	arr.vertex = [
+		Vector2(1,0),
+		Vector2(1,1),
+		Vector2(0,1),
+		Vector2(0,0)
+	]
 
 func init_node():
 	node.TimeBar = get_node("/root/Game/TimeBar") 
@@ -134,6 +144,9 @@ func init_vec():
 	
 	if num.knot.n % 2 == 0:
 		vec.project.offset.x -= num.project.a / 2
+	
+	vec.terrain = {}
+	vec.terrain.offset = vec.window_size.center
 
 func init_window_size():
 	vec.window_size = {}

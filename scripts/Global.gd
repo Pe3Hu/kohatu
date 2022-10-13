@@ -35,6 +35,8 @@ func init_primary_key():
 	num.primary_key.knot = 0
 	num.primary_key.edge = 0
 	num.primary_key.slot = 0
+	num.primary_key.lode = 0
+	num.primary_key.region = 0
 
 func init_dict():
 	dict.capsule = {}
@@ -110,6 +112,26 @@ func init_dict():
 			"Output": ["Drone","Drone"]
 		}
 	}
+	
+	dict.lode = {}
+	dict.lode.bulk = {
+		"3": {
+			"Edge": 6,
+			"Corner": 9,
+			"Center": 12,
+			"Overflow": 3
+		}
+	}
+	dict.lode.fullness = {
+		"Value": [10,6,3,1],
+		"Count": [1,2,3,4],
+#		"Value": [11,7,5,3,2],
+#		"Count": [1,2,3,4,5],
+		"Total": 0
+	}
+	
+	for _i in dict.lode.fullness["Value"].size():
+		dict.lode.fullness["Total"] += dict.lode.fullness["Count"][_i]*dict.lode.fullness["Value"][_i]
 
 func init_arr():
 	arr.sequence = {} 
@@ -124,6 +146,15 @@ func init_arr():
 		Vector2(0,1),
 		Vector2(0,0)
 	]
+	
+	arr.neighbour = [
+		Vector2(1,0),
+		Vector2(0,1),
+		Vector2(-1,0),
+		Vector2(0,-1)
+	]
+	arr.layer = ["Region","Bulk"]#["Mix"]#,"Lode","Mix",Noise
+	
 
 func init_node():
 	node.TimeBar = get_node("/root/Game/TimeBar") 

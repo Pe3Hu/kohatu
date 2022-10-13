@@ -21,7 +21,7 @@ func init_nulls():
 	input.cols = 27
 	input.rows = 27
 	input.n = 3
-	input.bulk = 1000
+	input.bulk = 78000.0
 	Global.obj.terrain = Classes_Terrain.Terrain.new(input)
 
 func _ready():
@@ -35,7 +35,8 @@ func _ready():
 func _input(event):
 	if event is InputEventMouseButton:
 		if Global.flag.click:
-			pass
+			Global.flag.click = !Global.flag.click
+			Global.obj.terrain.next_layer()
 		else:
 			Global.flag.click = !Global.flag.click
 

@@ -49,8 +49,8 @@ func init_dict():
 		"Reconnaissance": ["Data","Fact","Decree"]
 	}
 	
-	dict.drone = {}
-	dict.drone.job = {
+	dict.module = {}
+	dict.module.job = {
 		"Drilling": {
 			"Input": ["Terrain"],
 			"Output": ["Raw"]
@@ -110,7 +110,33 @@ func init_dict():
 		"Assembling": {
 			"Input": ["Project","Module"],
 			"Output": ["Drone","Drone"]
+		},
+		"Broadcasting": {
+			"Input": ["Terrain"],
+			"Output": ["Terrain"]
+		},
+		"Chassis": {
+			"Input": ["Drone"],
+			"Output": ["Drone"]
 		}
+	}
+	dict.drone.job = {
+		"Driller": "Drilling",
+		"Carter": "Carting", 
+		"Keeper": "Keeping",
+		"Melter": "Melting",
+		"Integrator": "Integration",
+		"Gatherer": "Gathering",
+		"Scrutinizer": "Scrutinizing",
+		"Tester": "Testing",
+		"Retentor": "Retention",
+		"Liquidator": "Liquidation",
+		"Scouter": "Scouting",
+		"Reviser": "Revise",
+		"Prognosticator": "Prognostication",
+		"Planner": "Planning",
+		"Assember": "Assembling",
+		"Broadcaster": "Broadcasting"
 	}
 	
 	dict.lode = {}

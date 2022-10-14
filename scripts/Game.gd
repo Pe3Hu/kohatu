@@ -23,6 +23,10 @@ func init_nulls():
 	input.n = 3
 	input.bulk = 78000.0
 	Global.obj.terrain = Classes_Terrain.Terrain.new(input)
+	
+	input = {}
+	Global.obj.terrain = Classes_Serveur.Serveur.new(input)
+	
 
 func _ready():
 #	var txt = "c4eeec20ece8ebfbe920e4eeec0a"

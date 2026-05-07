@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://bjlm6t5oqacjy"]
+
+[ext_resource type="Script" uid="uid://bp2rppn86ih0m" path="res://entities/hull/capsule/capsule.gd" id="1_2m11p"]
+[ext_resource type="Texture2D" uid="uid://bwmplpfuye44y" path="res://entities/hull/capsule/images/capsule_border.png" id="2_2m11p"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1e5lh"]
+size = Vector2(64, 64)
+
+[node name="Capsule" type="Area2D" unique_id=1535064218]
+script = ExtResource("1_2m11p")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1114288070]
+shape = SubResource("RectangleShape2D_1e5lh")
+
+[node name="BorderSprite" type="Sprite2D" parent="." unique_id=487410567]
+unique_name_in_owner = true
+texture = ExtResource("2_2m11p")

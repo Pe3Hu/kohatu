@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://cca13j77q3a26"]
+
+[ext_resource type="Script" uid="uid://bjsx67lmdxjh2" path="res://entities/hull/hull.gd" id="1_ge72r"]
+[ext_resource type="PackedScene" uid="uid://bjlm6t5oqacjy" path="res://entities/hull/capsule/capsule.tscn" id="2_ge72r"]
+[ext_resource type="PackedScene" uid="uid://bgiycfwaus1np" path="res://entities/hull/magistral/magistral.tscn" id="3_o0tu8"]
+
+[node name="Hull" type="Node2D" unique_id=247800843 node_paths=PackedStringArray("capsules", "magistrals")]
+visible = false
+script = ExtResource("1_ge72r")
+capsule_scene = ExtResource("2_ge72r")
+magistral_scene = ExtResource("3_o0tu8")
+capsules = NodePath("Capsules")
+magistrals = NodePath("Magistrals")
+
+[node name="Capsules" type="Node2D" parent="." unique_id=821750897]
+unique_name_in_owner = true
+
+[node name="Magistrals" type="Node2D" parent="." unique_id=279266896]
+unique_name_in_owner = true

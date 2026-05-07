@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://cwjeyn62awup2"]
+
+[ext_resource type="Script" uid="uid://mnq8nmw8al0s" path="res://entities/planet/planet.gd" id="1_iwji2"]
+[ext_resource type="PackedScene" uid="uid://cca13j77q3a26" path="res://entities/hull/hull.tscn" id="2_1p7wy"]
+[ext_resource type="PackedScene" uid="uid://cgouvyubsfdvr" path="res://entities/horde/horde.tscn" id="3_itihs"]
+
+[node name="Planet" type="Node2D" unique_id=1361899396]
+script = ExtResource("1_iwji2")
+
+[node name="Hull" parent="." unique_id=247800843 instance=ExtResource("2_1p7wy")]
+unique_name_in_owner = true
+
+[node name="Horde" parent="." unique_id=1748346512 instance=ExtResource("3_itihs")]

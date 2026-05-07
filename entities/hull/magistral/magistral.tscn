@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bgiycfwaus1np"]
+
+[ext_resource type="Script" uid="uid://q0gvl464nwgp" path="res://entities/hull/magistral/magistral.gd" id="1_bmifh"]
+
+[node name="Magistral" type="Node2D" unique_id=750951510]
+script = ExtResource("1_bmifh")

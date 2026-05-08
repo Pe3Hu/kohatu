@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://6giqawm1cq0g" path="res://entities/horde/images/horde palette.png" id="1_6grg5"]
 [ext_resource type="Script" uid="uid://bt57ib7wqfw8j" path="res://entities/horde/horde.gd" id="1_l0pov"]
+[ext_resource type="Texture2D" uid="uid://m2hvti8h6tst" path="res://entities/horde/images/horde_border.png" id="3_43oor"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_43oor"]
 texture = ExtResource("1_6grg5")
@@ -29,3 +30,7 @@ sources/0 = SubResource("TileSetAtlasSource_43oor")
 [node name="Horde" type="TileMapLayer" unique_id=1748346512]
 tile_set = SubResource("TileSet_ffhr6")
 script = ExtResource("1_l0pov")
+
+[node name="Border" type="Sprite2D" parent="." unique_id=131913063]
+position = Vector2(32, 32)
+texture = ExtResource("3_43oor")

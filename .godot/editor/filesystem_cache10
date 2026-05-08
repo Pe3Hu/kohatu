@@ -1,5 +1,5 @@
 63f7b34db8d8cdea90c76aacccf841ec
-::res://::1778165898
+::res://::1778215954
 ::res://assets/::1778136618
 icon.svg::CompressedTexture2D::5994948088208690775::1765022965::1765023059::1::::<><><>0<>0<>02eacd1de94d8cd03fff6a9e79b797e2<>res://.godot/imported/icon.svg-56083ea2a1f1a4f1e49773bdc6d7826c.ctex::
 ::res://assets/fonts/::1778136618
@@ -12,11 +12,13 @@ meslo.ttf::FontFile::2948952988611021511::1492497582::1770999477::1::::<><><>0<>
 ::res://entities/core/::1778137428
 ::res://entities/enemy/::1778137659
 EnemyController.gd::GDScript::7063874780669134202::1778137659::0::1::::EnemyController<>Node<><>0<>0<><>::
-::res://entities/horde/::1778162939
-horde.gd::GDScript::3783897378535550891::1778162939::0::1::::Horde<>TileMapLayer<><>0<>0<><>::
-horde.tscn::PackedScene::5224128850824747343::1778162797::0::1::::<><><>0<>0<><>::uid://6giqawm1cq0g::::res://entities/horde/images/horde palette.png<>uid://bt57ib7wqfw8j::::res://entities/horde/horde.gd
-::res://entities/horde/images/::1778154913
+::res://entities/horde/::1778215890
+horde.gd::GDScript::3783897378535550891::1778215890::0::1::::Horde<>TileMapLayer<><>0<>0<><>::
+horde.tscn::PackedScene::5224128850824747343::1778215890::0::1::::<><><>0<>0<><>::uid://6giqawm1cq0g::::res://entities/horde/images/horde palette.png<>uid://bt57ib7wqfw8j::::res://entities/horde/horde.gd<>uid://m2hvti8h6tst::::res://entities/horde/images/horde_border.png
+::res://entities/horde/images/::1778215954
 horde palette.png::CompressedTexture2D::2188754762513737544::1778154869::1778154913::1::::<><><>0<>0<>eb5af05ff1b3655ac776a907abdffa13<>res://.godot/imported/horde palette.png-efa96439f2633cf28e1489e36ed061f0.ctex::
+horde_border.png::CompressedTexture2D::898467855449423051::1778212209::1778212214::1::::<><><>0<>0<>3292a9f683cb2358d06a385074e4d612<>res://.godot/imported/horde_border.png-46d61dc44f4074da6e59fce9e419ee59.ctex::
+ore_palette.png::CompressedTexture2D::6979206551130550161::1778212219::1778215954::1::::<><><>0<>0<>005a0172ef16a6708d2032acc5b53b56<>res://.godot/imported/ore_palette.png-282edc8106b7bdfb6c04d164b219ca43.ctex::
 ::res://entities/horde/insect/::1778155310
 insect.gd::GDScript::344880440429440433::1778151428::0::1::::Insect<>Area2D<><>0<>0<><>::
 insect.tscn::PackedScene::4615028087921439097::1778155310::0::1::::<><><>0<>0<><>::uid://e6ceo23xtinp::::res://entities/horde/insect/insect.gd<>uid://crn86ir408gcd::::res://assets/icon.svg
@@ -40,9 +42,9 @@ token.gd::GDScript::8806779556754059331::1778149369::0::1::::Token<>Resource<><>
 ::res://entities/world/::1778137952
 world.gd::GDScript::1186082734165819011::1765023357::0::1::::World<>Node<><>0<>0<><>::
 world.tscn::PackedScene::8687635180721816570::1778137952::0::1::::<><><>0<>0<><>::uid://q5suynu18b52::::res://entities/world/world.gd<>uid://cwjeyn62awup2::::res://entities/planet/planet.tscn
-::res://global/::1778155310
+::res://global/::1778214891
 Bozo.gd::GDScript::7266829781729311716::1778151616::0::1::::<>Node<><>0<>0<><>::
-Catalog.gd::GDScript::3495370124140258623::1778155310::0::1::::<>Node<><>0<>0<><>::
+Catalog.gd::GDScript::3495370124140258623::1778214891::0::1::::<>Node<><>0<>0<><>::
 EventBus.gd::GDScript::8405236835403284849::1778142719::0::1::::<>Node<><>0<>0<><>::
 GameController.gd::GDScript::3372873396060414247::1778137758::0::1::::GameController<>Node<><>0<>0<><>::
 GameState.gd::GDScript::4669962114867990724::1778150458::0::1::::<>Node<><>0<>0<><>::

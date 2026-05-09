@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://cudt6ibvp6c6x"]
+
+[ext_resource type="Script" uid="uid://bm5xae37fwki7" path="res://entities/horde/sector/sector.gd" id="1_fhegx"]
+[ext_resource type="PackedScene" uid="uid://qjf8cm66r7jt" path="res://entities/horde/sector/line/row.tscn" id="2_m8m2i"]
+[ext_resource type="PackedScene" uid="uid://i2hkgxtdp78s" path="res://entities/horde/sector/line/col.tscn" id="3_lj6lv"]
+
+[node name="Sector" type="Node2D" unique_id=916848251]
+script = ExtResource("1_fhegx")
+row_scene = ExtResource("2_m8m2i")
+col_scene = ExtResource("3_lj6lv")
+
+[node name="Rows" type="Node2D" parent="." unique_id=1616321440]
+unique_name_in_owner = true
+
+[node name="Cols" type="Node2D" parent="." unique_id=1464753512]
+unique_name_in_owner = true

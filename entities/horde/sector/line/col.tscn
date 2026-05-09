@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://i2hkgxtdp78s"]
+
+[ext_resource type="Script" uid="uid://c57nd546s66yh" path="res://entities/horde/sector/line/col.gd" id="1_u3wvp"]
+
+[node name="Col" type="Node2D" unique_id=1310455578]
+script = ExtResource("1_u3wvp")

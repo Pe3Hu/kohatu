@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://ccyaojm3p0pa2"]
+
+[ext_resource type="Script" uid="uid://bcth5swd7ly8y" path="res://entities/horde/sector/line/diagonal.gd" id="1_2ri80"]
+
+[node name="Diagonal" type="Node2D" unique_id=1806113333]
+script = ExtResource("1_2ri80")

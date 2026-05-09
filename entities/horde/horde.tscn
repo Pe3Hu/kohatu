@@ -3,6 +3,10 @@
 [ext_resource type="Texture2D" uid="uid://6giqawm1cq0g" path="res://entities/horde/images/horde palette.png" id="1_6grg5"]
 [ext_resource type="Script" uid="uid://bt57ib7wqfw8j" path="res://entities/horde/horde.gd" id="1_l0pov"]
 [ext_resource type="Texture2D" uid="uid://m2hvti8h6tst" path="res://entities/horde/images/horde_border.png" id="3_43oor"]
+[ext_resource type="PackedScene" uid="uid://b60s3rejkgpy4" path="res://entities/horde/insect/insect.tscn" id="3_ffhr6"]
+[ext_resource type="PackedScene" uid="uid://dvpt7ohkn10xu" path="res://entities/horde/sector/site/site.tscn" id="4_8p6nq"]
+[ext_resource type="PackedScene" uid="uid://cudt6ibvp6c6x" path="res://entities/horde/sector/sector.tscn" id="5_w4gdc"]
+[ext_resource type="PackedScene" uid="uid://ccyaojm3p0pa2" path="res://entities/horde/sector/line/diagonal.tscn" id="6_nq0gl"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_43oor"]
 texture = ExtResource("1_6grg5")
@@ -30,6 +34,22 @@ sources/0 = SubResource("TileSetAtlasSource_43oor")
 [node name="Horde" type="TileMapLayer" unique_id=1748346512]
 tile_set = SubResource("TileSet_ffhr6")
 script = ExtResource("1_l0pov")
+insect_scene = ExtResource("3_ffhr6")
+site_scene = ExtResource("4_8p6nq")
+sector_scene = ExtResource("5_w4gdc")
+diagonal_scene = ExtResource("6_nq0gl")
+
+[node name="Sites" type="Node2D" parent="." unique_id=13878622]
+unique_name_in_owner = true
+
+[node name="Sectors" type="Node2D" parent="." unique_id=432625935]
+unique_name_in_owner = true
+
+[node name="Diagonals" type="Node2D" parent="." unique_id=679185696]
+unique_name_in_owner = true
+
+[node name="Insects" type="Node2D" parent="." unique_id=1223043061]
+unique_name_in_owner = true
 
 [node name="Border" type="Sprite2D" parent="." unique_id=131913063]
 position = Vector2(32, 32)

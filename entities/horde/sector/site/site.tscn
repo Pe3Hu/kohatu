@@ -1,13 +1,13 @@
-[gd_scene format=3 uid="uid://b60s3rejkgpy4"]
+[gd_scene format=3 uid="uid://dvpt7ohkn10xu"]
 
-[ext_resource type="Script" uid="uid://e6ceo23xtinp" path="res://entities/horde/insect/insect.gd" id="1_kl8mt"]
-[ext_resource type="Texture2D" uid="uid://crn86ir408gcd" path="res://assets/icon.svg" id="1_rxgxn"]
+[ext_resource type="Script" uid="uid://cpbvc2lb5ag4s" path="res://entities/horde/sector/site/site.gd" id="1_5vdqi"]
+[ext_resource type="Texture2D" uid="uid://crn86ir408gcd" path="res://assets/icon.svg" id="2_p1qgd"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hyj2a"]
 size = Vector2(64, 64)
 
-[node name="Insect" type="Area2D" unique_id=1093021827]
-script = ExtResource("1_kl8mt")
+[node name="Site" type="Area2D" unique_id=1093021827]
+script = ExtResource("1_5vdqi")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1447392001]
 shape = SubResource("RectangleShape2D_hyj2a")
@@ -15,10 +15,11 @@ shape = SubResource("RectangleShape2D_hyj2a")
 [node name="BodySprite" type="Sprite2D" parent="." unique_id=194798104]
 visible = false
 scale = Vector2(0.25, 0.25)
-texture = ExtResource("1_rxgxn")
+texture = ExtResource("2_p1qgd")
 
 [node name="IndexLabel" type="Label" parent="." unique_id=293964423]
 unique_name_in_owner = true
+visible = false
 offset_left = -32.0
 offset_top = -34.0
 offset_right = 32.0

@@ -14,6 +14,28 @@ const capsule_to_color = {
 #endregion
 
 #region windrose
+#const windrose_to_direction = {
+	#Bozo.Windrose.N: Vector2i(0, 1),
+	#Bozo.Windrose.NE: Vector2i(1, 1),
+	#Bozo.Windrose.E: Vector2i(1, 0),
+	#Bozo.Windrose.SE: Vector2i(1, -1),
+	#Bozo.Windrose.S: Vector2i(0, -1),
+	#Bozo.Windrose.SW: Vector2i(-1, -1),
+	#Bozo.Windrose.W: Vector2i(-1, 0),
+	#Bozo.Windrose.NW: Vector2i(-1, 1),
+#}
+#
+#const direction_to_windrose = {
+	#Vector2i(0, 1): Bozo.Windrose.N,
+	#Vector2i(1, 1): Bozo.Windrose.NE,
+	#Vector2i(1, 0): Bozo.Windrose.E,
+	#Vector2i(1, -1): Bozo.Windrose.SE,
+	#Vector2i(0, -1): Bozo.Windrose.S,
+	#Vector2i(-1, -1): Bozo.Windrose.SW,
+	#Vector2i(-1, 0): Bozo.Windrose.W,
+	#Vector2i(-1, 1): Bozo.Windrose.NW,
+#}
+
 const windrose_to_direction = {
 	Bozo.Windrose.N: Vector2i(0, -1),
 	Bozo.Windrose.NE: Vector2i(1, -1),

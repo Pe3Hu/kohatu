@@ -1,258 +1,257 @@
 extends TileMapLayer
 class_name Horde
 
-
 @export var insect_scene: PackedScene
 @export var site_scene: PackedScene
 @export var sector_scene: PackedScene
 @export var diagonal_scene: PackedScene
 
+var sectors: Array[Sector] = []
+var diagonals: Array[Diagonal] = []
+var sites: Array[Site] = []
+var insects: Array[Insect] = []
 
-var sectors: Array[Sector]
-var diagonals: Array[Diagonal]
-var sites: Array[Site]
-var insects: Array[Insect]
+var coord_to_site: Dictionary = {}
+var site_to_insect: Dictionary = {}
 
-var windrose_to_sector: Dictionary
-var windrose_to_diagonal: Dictionary
-var coord_to_site: Dictionary
+var windrose_to_sector: Dictionary = {}
+var windrose_to_diagonal: Dictionary = {}
 
-var ring_to_coord: Dictionary
-var coord_to_ring: Dictionary
-var coord_to_windrose: Dictionary
-var windrose_to_coord: Dictionary
-var coord_to_insect: Dictionary
+var claims: Dictionary = {}
+var shift_direction
 
-var spawn_coords: Array[Vector2i]
 
-var intents: Dictionary
-
+#region init
 
 func _ready() -> void:
-	init_sectors()
 	init_diagonals()
+	init_sectors()
 	init_sites()
+	#spawn_starter_insects()
 	
-	for sector in sectors:
-		var row = sector.rows.back()
-		
-		for site in row.sites:
+	for sector in sectors: 
+		var prev_line = sector.cols[0]
+		for site in prev_line.sites[0].sites:
 			set_cell(site.coord, 0, Catalog.windrose_to_palette[sector.windrose])
-	#init_spawn_coords()
-	#init_insects()
-
-func init_sectors() -> void:
-	for windrose in Catalog.orthogonal_windroses:
-		add_sector(windrose)
-
-func add_sector(windrose_: Bozo.Windrose) -> void:
-	var sector = sector_scene.instantiate()
-	sector.setup(self, windrose_)
-	%Sectors.add_child(sector)
-	sectors.append(sector)
-	windrose_to_sector[windrose_] = sector
+		#for col in sector.cols:
+		#	var site = col.sites.front()
+		#	set_cell(site.coord, 0, Catalog.windrose_to_palette[sector.windrose])
+		
+		#var prev_line = sector.cols.front()
+		#var line = prev_line.promotion_to_row[false]
+		#var site = prev_line.sites.front()
+		#set_cell(site.coord, 0, Catalog.windrose_to_palette[sector.windrose])
+		#for site in prev_line.sites: 
+		#	set_cell(site.coord, 0, Catalog.windrose_to_palette[sector.windrose])
 
 func init_diagonals() -> void:
 	for windrose in Catalog.diagonal_windroses:
-		add_diagonal(windrose)
+		var diagonal = diagonal_scene.instantiate()
+		diagonal.setup(self, windrose)
+		%Diagonals.add_child(diagonal)
+		diagonals.append(diagonal)
+		windrose_to_diagonal[windrose] = diagonal
 
-func add_diagonal(windrose_: Bozo.Windrose) -> void:
-	var diagonal = diagonal_scene.instantiate()
-	diagonal.setup(self, windrose_)
-	%Diagonals.add_child(diagonal)
-	diagonals.append(diagonal)
-	windrose_to_diagonal[windrose_] = diagonal
+func init_sectors() -> void:
+	for windrose in Catalog.orthogonal_windroses:
+		var sector = sector_scene.instantiate()
+		sector.setup(self, windrose)
+		%Sectors.add_child(sector)
+		sectors.append(sector)
+		windrose_to_sector[windrose] = sector
+
+	for diagonal in diagonals:
+		diagonal.init_neighbours()
+
+	for sector in sectors:
+		sector.init_line_neighbours()
 
 func init_sites() -> void:
-	for _y in range(-Catalog.HORDE_MAX_RING, Catalog.HORDE_MAX_RING + 1, 1):
-		for _x in range(-Catalog.HORDE_MAX_RING, Catalog.HORDE_MAX_RING + 1, 1):
-			var coord = Vector2i(_x, _y)
-			add_site(coord)
-			#var ring = max(abs(_y), abs(_x))
-			#
-			#if !ring_to_coord.has(ring):
-				#ring_to_coord[ring] = []
-			#
-			#ring_to_coord[ring].append(coord)
-			#coord_to_ring[coord] = ring
-			#var windrose = null
-			#
-			
-			#else:
-			#
-			#if windrose != null:
-				#coord_to_windrose[coord] = windrose
-				#windrose_to_coord[windrose].append(coord)
+	for y in range(-Catalog.HORDE_MAX_RING, Catalog.HORDE_MAX_RING + 1):
+		for x in range(-Catalog.HORDE_MAX_RING, Catalog.HORDE_MAX_RING + 1):
+			var coord = Vector2i(x, y)
+			var site = site_scene.instantiate()
+			site.setup(self, coord)
+			%Sites.add_child(site)
+			sites.append(site)
+			coord_to_site[coord] = site
 
+	for sector in sectors:
+		for col in sector.cols:
+			col.sites.sort_custom(func(a, b): return a.ring > b.ring)
+	
+	for site in sites:
+		site.init_sites()
+#endregion
 
-func add_site(coord_: Vector2i) -> void:
-	var site = site_scene.instantiate()
-	site.setup(self, coord_)
-	%Sites.add_child(site)
-	sites.append(site)
-	coord_to_site[coord_] = site
-
-func init_spawn_coords() -> void:
-	for windrose in Catalog.orthogonal_windroses:
-		var max_ring_coords = ring_to_coord[Catalog.HORDE_MAX_RING]
-		max_ring_coords = max_ring_coords.filter(func (a): return windrose_to_coord[windrose].has(a))
-		#for coord in windrose_to_coord[windrose]:
-		#	var ring = coord_to_ring[coord]
-		#	if ring > 1:
-		#		set_cell(coord, 0, Catalog.windrose_to_palette[windrose])
-		var coord = max_ring_coords[Catalog.HORDE_MAX_RING - 1]
-		spawn_coords.append(coord)
-
-func init_insects() -> void:
-	for _i in Catalog.STARTER_HORDE_INSECT_COUNT:
+#region spawn
+func spawn_starter_insects() -> void:
+	for i in range(Catalog.STARTER_HORDE_INSECT_COUNT):
 		add_insect()
 
 func add_insect() -> void:
+	var sector = choose_sector_for_spawn()
+	if sector == null: return
+	
+	var col = choose_col_for_sector(sector)
+	if col == null: return
+	
+	var site = pick_spawn_site(col)
+	if site == null: return
+
 	var insect = insect_scene.instantiate()
-	var coord = spawn_coords.pick_random()
 	%Insects.add_child(insect)
-	insect.setup(self, coord)
-	update_spawn_coord(insect)
+	insect.setup(self)
 
-func update_spawn_coord(insect_: Insect) -> void:
-	spawn_coords.erase(insect_.coord)
-	var windrose = coord_to_windrose[insect_.coord]
-	
-	for direction in Catalog.windrose_to_neighbour[windrose]:
-		var neighbour_coord = insect_.coord + direction
-		
-		if !is_diagonal(neighbour_coord) and !coord_to_insect.has(neighbour_coord):
-			spawn_coords.append(neighbour_coord)
+	register_insect(insect, site)
 
-func shift(windrose_: Bozo.Windrose) -> void:
-	pass
+func register_insect(insect: Insect, site: Site):
+	site_to_insect[site] = insect
+	insect.site = site
+	site.sector.population += 1
 
-func collect_intents() -> void:
-	intents.clear()
-	
+func pick_spawn_site(col: Col) -> Site:
+	for site in col.sites:
+		if is_free(site):
+			return site
+	return null
+
+func choose_sector_for_spawn() -> Sector:
+	var best_sector = null
+	var best_score = INF
+
+	for sector in sectors:
+		if !sector.has_free_columns(): continue
+
+		var score = sector.population
+		if score == 0:
+			score -= 100
+
+		if score < best_score:
+			best_score = score
+			best_sector = sector
+
+	return best_sector
+
+func choose_col_for_sector(sector: Sector) -> Col:
+	var cols = get_active_cols(sector)
+	return cols.pick_random() if !cols.is_empty() else null
+#endregion
+
+#region naviagtion
+func get_neighbour(site: Site, dir: Bozo.Windrose) -> Site:
+	var coord = site.coord + Catalog.windrose_to_direction[dir]
+	return coord_to_site.get(coord)
+
+func map_through_diagonal(site: Site, diagonal_site: Site) -> Site:
+	var target_sector = site.sector.diagonal_to_sector.get(diagonal_site.diagonal)
+	return target_sector.cols.front().sites.front() if target_sector != null else site
+
+func apply_shift(site: Site, shift_dir: Bozo.Windrose) -> Site:
+	return null
+
+#endregion
+
+func shift(dir):
+	shift_direction = dir
+	tick()
+
+func tick():
+	build_intents()
+	resolve_conflicts()
+	commit_phase()
+
+func build_intents():
 	for insect in insects:
-		var windrose = coord_to_windrose[insect.coord]
-		var dir = Catalog.windrose_to_direction[
-			Catalog.windrose_to_mirror[windrose]
-		]
-		
-		intents[insect] = dir
+		insect.intent_path.clear()
 
-func resolve_intents() -> Dictionary:
-	var target_map = {}
-	var final_moves = {}
-	
-	var sorted = intents.keys()
-	sorted.sort_custom(func(a, b):
-		return coord_to_ring[a.coord] > coord_to_ring[b.coord]
-	)
-	
-	for insect in sorted:
-		var dir = intents[insect]
-		var target = insect.coord + dir
-		
-		# ❌ граница поля
-		if !is_inside_border(target):
-			continue
-		
-		# ❌ занято
-		if coord_to_insect.has(target):
-			continue
-		
-		# ❌ конфликт
-		if target_map.has(target):
-			continue
-		
-		# 🚫 RING = 1 → стоп без попыток
-		if coord_to_ring.get(target, -1) == 1:
-			continue
-		
-		# ⚠️ ДИАГОНАЛЬНОЕ ПРАВИЛО
-		if is_diagonal(target):
-			var fallback_dir = get_center_pull(insect.coord)
-			var fallback_target = insect.coord + fallback_dir
-			
-			if is_valid_move(insect, fallback_target, target_map):
-				target_map[fallback_target] = insect
-				final_moves[insect] = fallback_dir
-			
-			continue
-		
-		# ✅ обычное движение
-		target_map[target] = insect
-		final_moves[insect] = dir
-	
-	return final_moves
+		var shifted_site = apply_shift(insect.site, shift_direction)
+		insect.intent_path.append(shifted_site)
 
-func get_center_pull(coord: Vector2i) -> Vector2i:
-	if abs(coord.x) > abs(coord.y):
-		return Vector2i(0, -sign(coord.y))
-	else:
-		return Vector2i(-sign(coord.x), 0)
+		#for next_site in [
+			#get_forward(shifted_site),
+			#get_align(shifted_site),
+			#get_side(shifted_site),
+			#get_back(shifted_site)
+		#]:
+			#if is_free(next_site):
+				#insect.intent_path.append(next_site)
+				#break
 
-func is_valid_move(insect: Insect, target: Vector2i, target_map: Dictionary) -> bool:
-	if !is_inside_border(target):
-		return false
-	
-	if coord_to_insect.has(target):
-		return false
-	
-	if target_map.has(target):
-		return false
-	
-	return true
+func resolve_conflicts():
+	claims.clear()
 
-func apply_movements(moves: Dictionary) -> void:
-	for insect in moves.keys():
-		var dir = moves[insect]
-		
-		set_cell(insect.coord, 0, Catalog.EMPTY_INSECT_COORD)
-		coord_to_insect.erase(insect.coord)
-		
-		insect.coord += dir
-		
-		coord_to_insect[insect.coord] = insect
-		
-		var windrose = coord_to_windrose[insect.coord]
-		set_cell(insect.coord, 0, Catalog.windrose_to_palette[windrose])
-		
-		insect.position = map_to_local(insect.coord)
+	for insect in insects:
+		var target_site = insect.intent_path.back()
+		if !claims.has(target_site):
+			claims[target_site] = []
+		claims[target_site].append(insect)
 
-func simulate_step() -> void:
-	collect_intents()
-	var moves = resolve_intents()
-	apply_movements(moves)
+	for site in claims:
+		var conflict_list = claims[site]
+		if conflict_list.size() <= 1: continue
+
+		for i in range(1, conflict_list.size()):
+			var insect = conflict_list[i]
+			var fallback_site = insect.site.back
+			insect.intent_path = [fallback_site] if is_free(fallback_site) else [insect.site]
+
+func commit_phase():
+	site_to_insect.clear()
+
+	for insect in insects:
+		var final_site = insect.intent_path.back()
+		insect.site = final_site
+		site_to_insect[final_site] = insect
+		insect.global_position = final_site.global_position
+
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed:
-		if Input.is_key_pressed(KEY_SPACE):
-			simulate_step()
 		if Input.is_key_pressed(KEY_W):
 			shift(Bozo.Windrose.S)
-		if Input.is_key_pressed(KEY_A):
-			shift(Bozo.Windrose.W)
-		if Input.is_key_pressed(KEY_S):
+		elif Input.is_key_pressed(KEY_S):
 			shift(Bozo.Windrose.N)
-		if Input.is_key_pressed(KEY_D):
+		elif Input.is_key_pressed(KEY_A):
 			shift(Bozo.Windrose.E)
+		elif Input.is_key_pressed(KEY_D):
+			shift(Bozo.Windrose.W)
 
-func is_diagonal(coord_: Vector2i) -> bool:
-	return abs(coord_.x) == abs(coord_.y)
 
-func is_inside_border(coord_: Vector2i) -> bool:
-	if abs(coord_.x) > Catalog.HORDE_MAX_RING: return false
-	if abs(coord_.y) > Catalog.HORDE_MAX_RING: return false
-	return true
+#region help
+func is_free(site: Site) -> bool:
+	return site != null and !site_to_insect.has(site)
 
-func is_direction_free(direction_: Vector2i) -> bool:
-	var coord
-	if is_diagonal(coord + direction_):
-		return false
-	
-	if ring_to_coord[1].has(coord + direction_):
-		return false
-	
-	if coord_to_insect.has(coord + direction_):
-		return false
-	
-	return true
+func is_col_used(col: Col) -> bool:
+	for site in col.sites:
+		if site_to_insect.has(site):
+			return true
+	return false
+
+func get_active_cols(sector: Sector) -> Array[Col]:
+	var result: Array[Col] = []
+	var visited: Dictionary = {}
+	var queue: Array[Col] = []
+
+	var center_col = sector.index_to_col.get(0)
+	if center_col == null:
+		return result
+
+	queue.append(center_col)
+	visited[center_col] = true
+
+	while !queue.is_empty():
+		var col = queue.pop_front()
+
+		if !is_col_used(col):
+			result.append(col)
+			continue
+
+		for dir in [true, false]:
+			var neighbour_col = col.clockwise_to_col.get(dir)
+			if neighbour_col != null and !visited.has(neighbour_col):
+				visited[neighbour_col] = true
+				queue.append(neighbour_col)
+
+	return result
+#endregion

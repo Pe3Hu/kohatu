@@ -17,10 +17,14 @@ var row: Row
 var ring: int
 
 var forward: Site
-var back: Site
+var backward: Site
 var counterclockwise: Site
 var clockwise: Site
+var align: Site
 var sites: Array[Site]
+
+var insect: Insect
+var insect_intent: Insect
 
 
 func setup(horde_: Horde, coord_: Vector2i) -> void:
@@ -78,10 +82,9 @@ func join_sector() -> void:
 func is_occupied() -> bool:
 	return horde.site_to_insect.has(self)
 
-
 func init_sites() -> void:
 	init_forward()
-	init_back()
+	init_backward()
 	init_sides()
 
 func init_forward() -> void:
@@ -92,13 +95,13 @@ func init_forward() -> void:
 		forward = col.sites[id + 1]
 		sites.append(forward)
 
-func init_back() -> void:
-	back = null
+func init_backward() -> void:
+	backward = null
 	if col == null: return
 	var id = col.sites.find(self)
 	if id > 0:
-		back = col.sites[id - 1]
-		sites.append(back)
+		backward = col.sites[id - 1]
+		sites.append(backward)
 
 func init_sides() -> void:
 	#return
@@ -118,13 +121,25 @@ func init_sides() -> void:
 		if previous_col.sites.size() > id:
 			counterclockwise = previous_col.sites[id]
 			sites.append(counterclockwise)
+	
+	init_align()
 
-#func get_align(site: Site) -> Site:
-	#var col = site.col
-	#if col == null or col.index == 0: return null
-#
-	#var center_col = col.sector.index_to_col.get(0)
-	#if center_col == null: return null
-#
-	#var index = clamp(col.sites.find(site), 0, center_col.sites.size() - 1)
-	#return center_col.sites[index]
+func init_align() -> void:
+	align = null
+	var options = []
+	if clockwise:
+		if clockwise.sector == sector:
+			options.append(clockwise)
+	
+	if counterclockwise:
+		if counterclockwise.sector == sector:
+			options.append(counterclockwise)
+	
+	if options.size() != 1:
+		var center_index = (row.sites.size() - 1) * 0.5
+		var center_coord = row.sites[center_index].coord
+		if center_coord == coord: return
+		
+		options.sort_custom(func (a, b): return a.coord.distance_to(center_coord) < b.coord.distance_to(center_coord))
+	
+	align = options.front()

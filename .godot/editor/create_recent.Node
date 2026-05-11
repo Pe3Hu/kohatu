@@ -1,7 +1,8 @@
+Camera2D
+TileMapLayer
 Node2D
 Label
 Sprite2D
-TileMapLayer
 CollisionShape2D
 Area2D
 Node

@@ -111,3 +111,14 @@ const INSECT_SPRITE_SIZE = Vector2(64, 64)
 const HORDE_MAX_RING = 6
 const STARTER_HORDE_INSECT_COUNT = 23
 const EMPTY_INSECT_COORD = Vector2i(3, 3)
+
+
+func is_parallel(a_: Vector2i, b_: Vector2i) -> bool:
+	if abs(a_.x) == abs(b_.x) and abs(a_.y) == abs(b_.y): 
+		return true
+	return false
+
+func is_perpendicular(a_: Vector2i, b_: Vector2i) -> bool:
+	if abs(a_.x) == abs(b_.y) and abs(a_.y) == abs(b_.x): 
+		return true
+	return false

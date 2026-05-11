@@ -20,19 +20,21 @@ var windrose_to_diagonal: Dictionary = {}
 var claims: Dictionary = {}
 var shift_direction
 
+var active_cols: Array[Col]
+
 
 #region init
-
 func _ready() -> void:
 	init_diagonals()
 	init_sectors()
 	init_sites()
-	#spawn_starter_insects()
+	spawn_starter_insects()
 	
-	for sector in sectors: 
-		var prev_line = sector.cols[0]
-		for site in prev_line.sites[0].sites:
-			set_cell(site.coord, 0, Catalog.windrose_to_palette[sector.windrose])
+	#for sector in sectors: 
+		#var prev_line = sector.cols[0]
+		#for site in prev_line.sites[0].sites:
+			#set_cell(site.coord, 0, Catalog.windrose_to_palette[sector.windrose])
+		
 		#for col in sector.cols:
 		#	var site = col.sites.front()
 		#	set_cell(site.coord, 0, Catalog.windrose_to_palette[sector.windrose])
@@ -104,11 +106,14 @@ func add_insect() -> void:
 	insect.setup(self)
 
 	register_insect(insect, site)
+	if !active_cols.has(col):
+		active_cols.append(col)
 
 func register_insect(insect: Insect, site: Site):
 	site_to_insect[site] = insect
 	insect.site = site
 	site.sector.population += 1
+	site.col.insects.append(insect)
 
 func pick_spawn_site(col: Col) -> Site:
 	for site in col.sites:
@@ -200,22 +205,27 @@ func commit_phase():
 	site_to_insect.clear()
 
 	for insect in insects:
-		var final_site = insect.intent_path.back()
-		insect.site = final_site
-		site_to_insect[final_site] = insect
-		insect.global_position = final_site.global_position
+		insect.follow_intent()
+		#insect.global_position = final_site.global_position
 
+func shit_forward() -> void:
+	for col in active_cols:
+		col.parallel_shift(false)
+	
+	commit_phase()
 
-func _input(event: InputEvent) -> void:
-	if event is InputEventKey and event.pressed:
-		if Input.is_key_pressed(KEY_W):
-			shift(Bozo.Windrose.S)
-		elif Input.is_key_pressed(KEY_S):
-			shift(Bozo.Windrose.N)
-		elif Input.is_key_pressed(KEY_A):
-			shift(Bozo.Windrose.E)
-		elif Input.is_key_pressed(KEY_D):
-			shift(Bozo.Windrose.W)
+#func _input(event: InputEvent) -> void:
+	#if event is InputEventKey and event.pressed:
+		#if Input.is_key_pressed(KEY_SPACE):
+			#shit_forward()
+		#if Input.is_key_pressed(KEY_W):
+			#shift(Bozo.Windrose.S)
+		#elif Input.is_key_pressed(KEY_S):
+			#shift(Bozo.Windrose.N)
+		#elif Input.is_key_pressed(KEY_A):
+			#shift(Bozo.Windrose.E)
+		#elif Input.is_key_pressed(KEY_D):
+			#shift(Bozo.Windrose.W)
 
 
 #region help

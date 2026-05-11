@@ -1,0 +1,10 @@
+res://entities/horde/horde.tscn
+res://entities/horde/sector/site/site.gd
+res://global/Catalog.gd
+res://entities/horde/sector/line/col.gd
+res://entities/horde/insect/insect.gd
+res://entities/horde/horde.gd
+res://entities/planet/atlas/atlas.tscn
+res://entities/planet/atlas/atlas.gd
+res://entities/planet/planet.tscn
+res://entities/planet/atlas/camera.gd

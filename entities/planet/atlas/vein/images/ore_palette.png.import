@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://c6o1roencs53r"
-path="res://.godot/imported/ore_palette.png-282edc8106b7bdfb6c04d164b219ca43.ctex"
+path="res://.godot/imported/ore_palette.png-931be2cdb9c2d20f5332a5ee506de527.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://entities/horde/images/ore_palette.png"
-dest_files=["res://.godot/imported/ore_palette.png-282edc8106b7bdfb6c04d164b219ca43.ctex"]
+source_file="res://entities/planet/atlas/vein/images/ore_palette.png"
+dest_files=["res://.godot/imported/ore_palette.png-931be2cdb9c2d20f5332a5ee506de527.ctex"]
 
 [params]
 

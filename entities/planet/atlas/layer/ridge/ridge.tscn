@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://c6uepyfv7vbxh"]
+
+[ext_resource type="Texture2D" uid="uid://c6o1roencs53r" path="res://entities/planet/atlas/vein/images/ore_palette.png" id="1_1fnc4"]
+[ext_resource type="Script" uid="uid://2h14xn0ca84d" path="res://entities/planet/atlas/layer/ridge/ridge.gd" id="2_0u5r5"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_qkl8c"]
+texture = ExtResource("1_1fnc4")
+texture_region_size = Vector2i(64, 64)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+8:0/0 = 0
+9:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_35j2h"]
+tile_size = Vector2i(64, 64)
+sources/0 = SubResource("TileSetAtlasSource_qkl8c")
+
+[node name="RidgeLayer" type="TileMapLayer" unique_id=1130330285]
+visible = false
+tile_set = SubResource("TileSet_35j2h")
+script = ExtResource("2_0u5r5")

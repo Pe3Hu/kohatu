@@ -30,8 +30,8 @@ func _ready():
 
 func calculate_min_zoom() -> float:
 	var world_size = Vector2(
-		atlas.map_width * atlas.tile_size,
-		atlas.map_height * atlas.tile_size
+		atlas.map_width * atlas.center_layer.tile_set.tile_size.x,
+		atlas.map_height * atlas.center_layer.tile_set.tile_size.y
 	)
 	
 	var viewport_size = get_viewport_rect().size
@@ -109,8 +109,8 @@ func smooth_zoom():
 
 func clamp_to_map():
 	var world_size = Vector2(
-		atlas.map_width * atlas.tile_size,
-		atlas.map_height * atlas.tile_size
+		atlas.map_width * atlas.center_layer.tile_set.tile_size.x,
+		atlas.map_height * atlas.center_layer.tile_set.tile_size.y
 	)
 
 	var viewport_size = get_viewport_rect().size / zoom
@@ -135,6 +135,6 @@ func clamp_to_map():
 
 func get_map_center():
 	return Vector2(
-		atlas.map_width * atlas.tile_size * 0.5,
-		atlas.map_height * atlas.tile_size * 0.5
+		atlas.map_width * atlas.center_layer.tile_set.tile_size.x * 0.5,
+		atlas.map_height * atlas.center_layer.tile_set.tile_size.y * 0.5
 	)

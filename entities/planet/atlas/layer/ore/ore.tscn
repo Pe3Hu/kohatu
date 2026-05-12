@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://bm85c26nx0s2j"]
+
+[ext_resource type="Texture2D" uid="uid://c6o1roencs53r" path="res://entities/planet/atlas/vein/images/ore_palette.png" id="1_4yod0"]
+[ext_resource type="Script" uid="uid://bm4e8tbruqjut" path="res://entities/planet/atlas/layer/ore/ore.gd" id="2_wyu6n"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_qkl8c"]
+texture = ExtResource("1_4yod0")
+texture_region_size = Vector2i(64, 64)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+8:0/0 = 0
+9:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_35j2h"]
+tile_size = Vector2i(64, 64)
+sources/0 = SubResource("TileSetAtlasSource_qkl8c")
+
+[node name="OreLayer" type="TileMapLayer" unique_id=1130330285]
+visible = false
+tile_set = SubResource("TileSet_35j2h")
+script = ExtResource("2_wyu6n")

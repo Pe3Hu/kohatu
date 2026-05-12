@@ -31,3 +31,9 @@ enum Windrose{
 	W,
 	NW
 }
+
+enum Economy {
+	RICH,
+	NORMAL,
+	POOR
+}

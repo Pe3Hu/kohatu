@@ -104,7 +104,21 @@ const windrose_to_neighbour = {
 	Bozo.Windrose.W: [Vector2i(0, -1), Vector2i(0, 1)],
 	#Bozo.Windrose.NW: [Vector2i(-1, 1)],
 }
+
+const windrose_to_border = {
+	Bozo.Windrose.N: Vector2(0.5, 0),
+	Bozo.Windrose.E: Vector2(1, 0.5),
+	Bozo.Windrose.S: Vector2(0.5, 1),
+	Bozo.Windrose.W: Vector2(0, 0.5),
+}
+
 #endregion
+
+const economy_to_weight = {
+	Bozo.Economy.RICH: 1.0,
+	Bozo.Economy.NORMAL: 0.8,
+	Bozo.Economy.POOR: 0.6,
+}
 
 const INSECT_SPRITE_SIZE = Vector2(64, 64)
 #const HORDE_INSECT_SIZE = Vector2i(6, 6)

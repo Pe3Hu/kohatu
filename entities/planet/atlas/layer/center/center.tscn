@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://d3itkq24msie1"]
 
-[ext_resource type="Texture2D" uid="uid://c6o1roencs53r" path="res://entities/planet/atlas/vein/images/ore_palette.png" id="1_c31b6"]
+[ext_resource type="Texture2D" uid="uid://c6o1roencs53r" path="res://entities/planet/atlas/images/ore_palette.png" id="1_c31b6"]
 [ext_resource type="Script" uid="uid://5rirf4eup86k" path="res://entities/planet/atlas/layer/center/center.gd" id="2_o53wc"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_qkl8c"]

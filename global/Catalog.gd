@@ -116,8 +116,8 @@ const windrose_to_border = {
 
 const economy_to_weight = {
 	Bozo.Economy.RICH: 1.0,
-	Bozo.Economy.NORMAL: 0.8,
-	Bozo.Economy.POOR: 0.6,
+	Bozo.Economy.NORMAL: 0.9,
+	Bozo.Economy.POOR: 0.8,
 }
 
 const INSECT_SPRITE_SIZE = Vector2(64, 64)

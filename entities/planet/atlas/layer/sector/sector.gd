@@ -2,7 +2,7 @@ extends BaseLayer
 class_name SectorLayer
 
 
-@export var ridge_block_threshold: float = 0.5
+@export var ridge_block_threshold: float = 0.0
 @export var center_block_threshold: float = 0.1
 
 var coord_to_windrose: Dictionary

@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://cm3k1666e42g1"]
+
+[ext_resource type="Script" uid="uid://cygwdpof85oaq" path="res://entities/planet/atlas/ship/ship.gd" id="1_hqvjq"]
+[ext_resource type="Texture2D" uid="uid://crn86ir408gcd" path="res://assets/icon.svg" id="1_olyk7"]
+
+[node name="Ship" type="Node2D" unique_id=1824750688]
+script = ExtResource("1_hqvjq")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=404777070]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_olyk7")

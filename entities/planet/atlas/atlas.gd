@@ -1,13 +1,14 @@
-extends Node2D
+extends SubViewportContainer
 class_name Atlas
 
-@export var map_width: int = 192
-@export var map_height: int = 108
+@export var map_width: int = 128
+@export var map_height: int = 128
 
 @export var center_layer: TileMapLayer
 @export var ridge_layer: TileMapLayer
 @export var sector_layer: TileMapLayer
 @export var ore_layer: TileMapLayer
+@export var final_layer: TileMapLayer
 
 var layers: Array[TileMapLayer] = []
 var current_layer_index := 0
@@ -20,7 +21,8 @@ func _ready():
 		center_layer,
 		ridge_layer,
 		sector_layer,
-		ore_layer
+		ore_layer,
+		final_layer
 	]
 
 	# передаём atlas в слои один раз
@@ -30,7 +32,7 @@ func _ready():
 
 		l.generate(self)
 
-	current_layer_index = 3
+	current_layer_index = layers.size() - 1
 	_update_visibility()
 
 

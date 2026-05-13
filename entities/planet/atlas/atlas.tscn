@@ -3,25 +3,43 @@
 [ext_resource type="Script" uid="uid://cr61pmlcipmqm" path="res://entities/planet/atlas/atlas.gd" id="1_2udts"]
 [ext_resource type="PackedScene" uid="uid://d3itkq24msie1" path="res://entities/planet/atlas/layer/center/center.tscn" id="2_qkl8c"]
 [ext_resource type="PackedScene" uid="uid://c6uepyfv7vbxh" path="res://entities/planet/atlas/layer/ridge/ridge.tscn" id="3_35j2h"]
-[ext_resource type="Script" uid="uid://dghcbdbws5yat" path="res://entities/planet/atlas/camera.gd" id="3_qkl8c"]
 [ext_resource type="PackedScene" uid="uid://crpbf5s8fgd8n" path="res://entities/planet/atlas/layer/sector/sector.tscn" id="4_ad6ft"]
 [ext_resource type="PackedScene" uid="uid://bm85c26nx0s2j" path="res://entities/planet/atlas/layer/ore/ore.tscn" id="5_bwb1s"]
+[ext_resource type="PackedScene" uid="uid://bm6m7846xb875" path="res://entities/planet/atlas/layer/final/final.tscn" id="6_j6y6f"]
+[ext_resource type="PackedScene" uid="uid://cm3k1666e42g1" path="res://entities/planet/atlas/ship/ship.tscn" id="7_j6y6f"]
+[ext_resource type="PackedScene" uid="uid://ps7l18uqvooq" path="res://entities/planet/atlas/camera/camera.tscn" id="8_cmj1q"]
 
-[node name="Atlas" type="Node2D" unique_id=1259573837 node_paths=PackedStringArray("center_layer", "ridge_layer", "sector_layer", "ore_layer")]
+[node name="Atlas" type="SubViewportContainer" unique_id=1592860514 node_paths=PackedStringArray("center_layer", "ridge_layer", "sector_layer", "ore_layer", "final_layer")]
+offset_left = -256.0
+offset_top = -256.0
+offset_right = 256.0
+offset_bottom = 256.0
 script = ExtResource("1_2udts")
-center_layer = NodePath("CenterLayer")
-ridge_layer = NodePath("RidgeLayer")
-sector_layer = NodePath("SectorLayer")
-ore_layer = NodePath("OreLayer")
+center_layer = NodePath("SubViewport/Layers/CenterLayer")
+ridge_layer = NodePath("SubViewport/Layers/RidgeLayer")
+sector_layer = NodePath("SubViewport/Layers/SectorLayer")
+ore_layer = NodePath("SubViewport/Layers/OreLayer")
+final_layer = NodePath("SubViewport/Layers/FinalLayer")
 
-[node name="CenterLayer" parent="." unique_id=1130330285 instance=ExtResource("2_qkl8c")]
+[node name="SubViewport" type="SubViewport" parent="." unique_id=918479608]
+handle_input_locally = false
+render_target_update_mode = 4
 
-[node name="RidgeLayer" parent="." unique_id=1195043368 instance=ExtResource("3_35j2h")]
+[node name="Layers" type="Node2D" parent="SubViewport" unique_id=1259573837]
 
-[node name="SectorLayer" parent="." unique_id=655336658 instance=ExtResource("4_ad6ft")]
+[node name="CenterLayer" parent="SubViewport/Layers" unique_id=1130330285 instance=ExtResource("2_qkl8c")]
 
-[node name="OreLayer" parent="." unique_id=1431653552 instance=ExtResource("5_bwb1s")]
+[node name="RidgeLayer" parent="SubViewport/Layers" unique_id=1195043368 instance=ExtResource("3_35j2h")]
 
-[node name="Camera2D" type="Camera2D" parent="." unique_id=795336569 node_paths=PackedStringArray("atlas")]
-script = ExtResource("3_qkl8c")
-atlas = NodePath("..")
+[node name="SectorLayer" parent="SubViewport/Layers" unique_id=655336658 instance=ExtResource("4_ad6ft")]
+
+[node name="OreLayer" parent="SubViewport/Layers" unique_id=1431653552 instance=ExtResource("5_bwb1s")]
+
+[node name="FinalLayer" parent="SubViewport/Layers" unique_id=1777115429 instance=ExtResource("6_j6y6f")]
+
+[node name="Ship" parent="SubViewport/Layers" unique_id=1824750688 node_paths=PackedStringArray("atlas") instance=ExtResource("7_j6y6f")]
+atlas = NodePath("../../..")
+
+[node name="AtlasCamera" parent="SubViewport/Layers" unique_id=1097168435 node_paths=PackedStringArray("ship", "atlas") instance=ExtResource("8_cmj1q")]
+ship = NodePath("../Ship")
+atlas = NodePath("../../..")

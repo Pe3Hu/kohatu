@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://ps7l18uqvooq"]
+
+[ext_resource type="Script" uid="uid://dghcbdbws5yat" path="res://entities/planet/atlas/camera/camera.gd" id="1_61mx1"]
+
+[node name="AtlasCamera" type="Camera2D" unique_id=1097168435]
+script = ExtResource("1_61mx1")

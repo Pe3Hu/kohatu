@@ -5,13 +5,17 @@ class_name RidgeLayer
 @export var noise_amplitude: float = 15.0
 
 @export var ridge_width_center: float = 4.0
-@export var ridge_width_edge: float = 10.0
+@export var ridge_width_edge: float = 24.0
 
-@export var center_radius_factor: float = 0.15
+@export var river_core_width: float = 6.0
+@export var river_falloff: float = 12.0     
+
+@export var center_radius_factor: float = 0.2
 
 var noise := FastNoiseLite.new()
 
 var ridges = []
+var rivers = []
 
 
 func generate(_atlas: Atlas):
@@ -26,64 +30,81 @@ func generate(_atlas: Atlas):
 	var corners = [
 		Vector2(0, 0),
 		Vector2(atlas.map_width - 1, 0),
-		Vector2(0, atlas.map_height - 1),
-		Vector2(atlas.map_width - 1, atlas.map_height - 1)
+		Vector2(atlas.map_width - 1, atlas.map_height - 1),
+		Vector2(0, atlas.map_height - 1)
 	]
 
-	# очистка
+	# очистка (всё чёрное)
 	for i in range(data.size()):
 		data[i] = 0.0
 
 	ridges.clear()
+	rivers.clear()
 
 	# =========================
-	# 🔥 СОЗДАЁМ РЕБРА
+	# ⛰ ХРЕБТЫ
 	# =========================
-
 	for c in corners:
-
 		var dir = (c - center).normalized()
-
 		var start = center + dir * base_radius
 		var end = c
-
 		ridges.append(_build_ridge(start, end, dir))
 
 	# =========================
-	# 🌊 РЕНДЕР С ОГРАНИЧЕНИЕМ ВЛИЯНИЯ
+	# 🌊 РЕКИ (ромб)
 	# =========================
+	#enum Windrose{
+		#N,
+		#NE,
+		#E,
+		#SE,
+		#S,
+		#SW,
+		#W,
+		#NW
+	#}
+	
+	#var corner_nw = Vector2(0, 0)
+	#var corner_ne = Vector2(atlas.map_width - 1, 0)
+	#var corner_se = Vector2(atlas.map_width - 1, atlas.map_height - 1)
+	#var orner_sw = Vector2(0, atlas.map_height - 1)
+	
+	var edge_n = Vector2(atlas.map_width / 2, 0)
+	var edge_e = Vector2(atlas.map_width - 1, atlas.map_height / 2)
+	var edge_s = Vector2(atlas.map_width / 2, atlas.map_height - 1)
+	var edge_w = Vector2(0, atlas.map_height / 2)
 
+	#var corners = [corner_nw, corner_ne, corner_se, orner_sw]
+	var edges = [edge_n, edge_e, edge_s, edge_w]
+
+	for _i in corners.size():
+		var begin = _river_point(corners[_i], edges[_i])
+		var _j = (_i - 1 + edges.size()) % edges.size()
+		var end = _river_point(corners[_i], edges[_j])
+		rivers.append(_build_river(begin, end))
+
+	# =========================
+	# 🌍 РЕНДЕР
+	# =========================
 	for y in range(atlas.map_height):
 		for x in range(atlas.map_width):
 
 			var p = Vector2(x, y)
 
-			var best_ridge = -1
-			var best_dist = INF
-			var best_t = 0.0
+			# -------------------------
+			# ⛰ ХРЕБТЫ (база)
+			# -------------------------
+			var ridge_value := 0.0
 
-			for r in range(ridges.size()):
-
-				var ridge = ridges[r]
-
-				# 🔥 проверка принадлежности (угловая доминация)
-				var dir_to_center = (p - Vector2(atlas.map_width*0.5, atlas.map_height*0.5)).normalized()
-				var ridge_dir = ridge["dir"]
-
-				# если не в своём секторе — пропускаем
-				if dir_to_center.dot(ridge_dir) < 0.2:
-					continue
-
-				var points = ridge["points"]
+			for r in ridges:
+				var points = r["points"]
 
 				for i in range(points.size() - 1):
-
 					var a = points[i]
 					var b = points[i + 1]
 
 					var seg = b - a
 					var len2 = seg.length_squared()
-
 					if len2 == 0:
 						continue
 
@@ -91,47 +112,71 @@ func generate(_atlas: Atlas):
 					t = clamp(t, 0.0, 1.0)
 
 					var closest = a + seg * t
-
 					var d = p.distance_to(closest)
 
-					if d < best_dist:
-						best_dist = d
-						best_ridge = r
-						best_t = float(i) / float(points.size())
+					var local_t = float(i) / float(points.size())
+					var width = lerp(ridge_width_center, ridge_width_edge, local_t)
 
-			if best_ridge == -1:
+					var m = smoothstep(width, 0.0, d)
+					ridge_value = max(ridge_value, m)
+
+			# если нет хребта — остаётся чёрным
+			if ridge_value <= 0.0:
 				continue
 
-			var width = lerp(ridge_width_center, ridge_width_edge, best_t)
+			var value = ridge_value
 
-			var m = best_dist / width
-			var mask = smoothstep(1.0, 0.0, m)
+			# -------------------------
+			# 🌊 РЕКИ (ВЫРЕЗАЮТ ХРЕБТЫ)
+			# -------------------------
+			for river in rivers:
+				var points = river["points"]
 
-			var idx = index(x, y)
+				for i in range(points.size() - 1):
+					var a = points[i]
+					var b = points[i + 1]
 
-			data[idx] = max(data[idx], mask)
-	
+					var seg = b - a
+					var len2 = seg.length_squared()
+					if len2 == 0:
+						continue
+
+					var t = (p - a).dot(seg) / len2
+					t = clamp(t, 0.0, 1.0)
+
+					var closest = a + seg * t
+					var d = p.distance_to(closest)
+
+					# 🔥 ядро реки (чистый проход)
+					var core = smoothstep(river_core_width, 0.0, d)
+
+					# мягкое расширение
+					var falloff = smoothstep(river_falloff, river_core_width, d)
+
+					# итог: центр = 1, края = 0
+					var river_mask = core * falloff
+
+					# 🔥 ВЫРЕЗАЕМ хребет
+					value = min(value, 1.0 - river_mask)
+
+			data[index(x, y)] = value
+
 	render()
 
 
 # =========================
-# 🌊 BUILD ONE RIDGE
+# ⛰ ХРЕБЕТ
 # =========================
-
 func _build_ridge(start: Vector2, end: Vector2, dir: Vector2):
 
 	var perp = Vector2(-dir.y, dir.x)
-
 	var points = []
 
 	for i in range(segment_count + 1):
-
 		var t = float(i) / float(segment_count)
 
 		var base = start.lerp(end, t)
-
 		var n = noise.get_noise_2d(base.x, base.y)
-
 		var offset = perp * n * noise_amplitude
 
 		points.append(base + offset)
@@ -140,3 +185,37 @@ func _build_ridge(start: Vector2, end: Vector2, dir: Vector2):
 		"points": points,
 		"dir": dir
 	}
+
+
+# =========================
+# 🌊 РЕКА
+# =========================
+func _build_river(start: Vector2, end: Vector2):
+
+	var dir = (end - start).normalized()
+	var perp = Vector2(-dir.y, dir.x)
+
+	var points = []
+
+	for i in range(segment_count + 1):
+		var t = float(i) / float(segment_count)
+
+		var base = start.lerp(end, t)
+		var n = noise.get_noise_2d(base.x, base.y)
+
+		var offset = perp * n * (noise_amplitude * 0.4)
+
+		points.append(base + offset)
+
+	return {
+		"points": points,
+		"dir": dir
+	}
+
+
+func _river_point(a: Vector2, b: Vector2) -> Vector2:
+	# выбираем направление от одного из концов
+	var r = atlas.rng.randf_range(0.3, 0.6)
+	var c = (b - a).normalized()
+	var l = (b - a).length() * r
+	return a + c * l
